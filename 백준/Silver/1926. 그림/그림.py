@@ -1,38 +1,35 @@
-import sys
-input = sys.stdin.readline
-
-n,m = map(int, input().split())
+n, m = map(int, input().split())
 map = [list(map(int, input().split())) for _ in range(n)]
-chk = [[False]*m for _ in range(n)]
+chk = [[0]*m for _ in range(n)]
 
-dy = [0,-1,0,1]
-dx = [1,0,-1,0]
 
-def bfs(y, x):
-    q = [(y, x)]
-    rs = 1
-    while q:
-        py, px = q.pop()
+dx=[1,0,-1,0]
+dy=[0,1,0,-1]
+
+def bfs(c,d,map):
+    size = 1
+    lili = [(c,d)]
+    while lili:
+        a, b = lili.pop()
         for k in range(4):
-            ny = py + dy[k]
-            nx = px + dx[k]
-            if 0<=ny<n and 0<=nx<m:
-                if map[ny][nx] == 1 and chk[ny][nx] == False:
-                    chk[ny][nx] = True
-                    rs += 1
-                    q.append((ny, nx))
-    return rs
+            nx = a+dx[k]
+            ny = b+dy[k]
+            if 0<=nx<n and 0<=ny<m:
+                if map[nx][ny] ==1 and chk[nx][ny] ==0:
+                 lili.append((nx,ny))
+                 chk[nx][ny]=1
+                 size+=1
+    return size
 
-cnt = 0
-psize = 0
+count = 0
+max_size = 0
 
-for j in range(n):
-    for i in range(m):
-        if map[j][i] == 1 and chk[j][i] == False:
-            chk[j][i] = True
-            cnt +=1
-            psize = max(psize, bfs(j, i))
+for i in range(n):
+    for j in range(m):
+        if map[i][j] == 1 and chk[i][j] == 0:
+            count+=1
+            chk[i][j]=1
+            max_size = max(max_size, bfs(i, j, map))
 
-
-print(cnt)
-print(psize)
+print(count)
+print(max_size)
