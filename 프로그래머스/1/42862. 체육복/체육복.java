@@ -2,37 +2,35 @@ import java.util.*;
 
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
-        // 초기 answer에 체육복을 도난당하지 않은 학생 수를 구한다.
-        int answer = n - lost.length;
-        
-        // reserve 배열을 정렬한다.
-        Arrays.sort(reserve);
-        // lost 배열을 정렬한다.
-        Arrays.sort(lost);
-        
-        // 반복문을 통해 여벌의 옷을 가져왔지만 도난당한 학생 수를 계산한다.
-        for (int i = 0; i < lost.length; i++) {
-            for (int j = 0; j < reserve.length; j++) {
-                if (lost[i] == reserve[j]) {
-                    answer++;
-                    lost[i] = -1;
-                    reserve[j] = -1;
-                    break;
-                }
+        List<Integer> lostList = new ArrayList<>();
+        List<Integer> reserveList = new ArrayList<>();
+
+        for (int l : lost) lostList.add(l);
+        for (int r : reserve) reserveList.add(r);
+
+        // 먼저 여벌 있는 학생이 도난당한 경우 제거
+        Iterator<Integer> it = lostList.iterator();
+        while (it.hasNext()) {
+            int l = it.next();
+            if (reserveList.contains(l)) {
+                reserveList.remove(Integer.valueOf(l));
+                it.remove();
             }
         }
-        
-        // 반복문을 통해 도난당했지만 여벌의 체육복을 빌릴 수 있는 학생 수를 계산한다.
-        for (int i = 0; i < lost.length; i++) {
-            for (int j = 0; j < reserve.length; j++) {
-                if (lost[i] - 1 == reserve[j] || lost[i] + 1 == reserve[j]) {
-                    answer++;
-                    reserve[j] = -1;
-                    break;
-                }
+
+        // 정렬은 안정성을 위해 해주는 것이 좋음
+        Collections.sort(reserveList);
+        Collections.sort(lostList);
+
+        // 여벌 체육복 빌려주기
+        for (int r : reserveList) {
+            if (lostList.contains(r - 1)) {
+                lostList.remove(Integer.valueOf(r - 1));
+            } else if (lostList.contains(r + 1)) {
+                lostList.remove(Integer.valueOf(r + 1));
             }
-        }		
-        
-        return answer;
+        }
+
+        return n - lostList.size();
     }
 }
