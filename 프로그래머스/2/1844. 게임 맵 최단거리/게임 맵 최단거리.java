@@ -1,49 +1,52 @@
 import java.util.*;
 
 class Solution {
+    
     private static final int[] dx = {0,0,-1,1};
     private static final int[] dy = {1,-1,0,0};
     
-    private static class Node {
-        int r, c;
-        public Node(int r, int c) {
-            this.r = r;
-            this.c = c;
+    private class Node{
+        int x;
+        int y;
+        
+        public Node(int x, int y){
+            this.x = x;
+            this.y = y;
         }
     }
     
-    public int solution (int[][] maps) {
-        int N = maps.length;
-        int M = maps[0].length;
+    public int solution(int[][] maps) {
+        int n = maps.length;
+        int m = maps[0].length;
         
-        int[][] dist = new int[N][M];
+        int[][] dist = new int[n][m];
         
         ArrayDeque<Node> deque = new ArrayDeque<>();
-        deque.addLast(new Node(0,0));
+        
+        deque.add(new Node(0, 0));
         dist[0][0] = 1;
         
-        while(!deque.isEmpty()) {
-            Node now = deque.pollFirst();
-            
-            for(int i = 0; i < 4; i++ ){
-                int nr = now.r + dx[i];
-                int nc = now.c + dy[i];
+        while(!deque.isEmpty()){
+            Node now = deque.poll();
+            for(int i = 0; i < 4; i++){
+                int nx = now.x + dx[i];
+                int ny = now.y + dy[i];
                 
-                if(nr < 0 || nc < 0 || nr >= N || nc >= M) {
+                if(nx<0 || ny<0 || nx>=n || ny>=m)
                     continue;
-                }
-                
-                if(maps[nr][nc] == 0 )
+                if(maps[nx][ny] == 0)
+                    continue;
+                if(dist[nx][ny]>=1)
                     continue;
                 
-                if(dist[nr][nc] == 0) {
-                    deque.addLast(new Node(nr, nc));
-                    dist[nr][nc] = dist[now.r][now.c] + 1;
-                }
+                dist[nx][ny] = dist[now.x][now.y]+1;
+                deque.add(new Node(nx, ny));
                 
             }
         }
         
-        return dist[N-1][M-1]==0 ? -1 : dist[N-1][M-1];
+        
+        
+        return dist[n-1][m-1] == 0 ? -1 : dist[n-1][m-1];
     }
 }
