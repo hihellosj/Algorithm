@@ -17,12 +17,31 @@ class Solution {
 
         ArrayList<String> answer = new ArrayList<>();
         
+        // for (HashMap<String, Integer> count : courseMap.values()) {
+        //     count.values().stream().max(Comparator.comparingInt(o->o))
+        //         .ifPresent(cnt -> count.entrySet().stream()
+        //                   .filter(entry -> cnt.equals(entry.getValue()) && cnt > 1)
+        //                   .forEach(entry->answer.add(entry.getKey())));
+        // }
+        
         for (HashMap<String, Integer> count : courseMap.values()) {
-            count.values().stream().max(Comparator.comparingInt(o->o))
-                .ifPresent(cnt -> count.entrySet().stream()
-                          .filter(entry -> cnt.equals(entry.getValue()) && cnt > 1)
-                          .forEach(entry->answer.add(entry.getKey())));
+            int max = 0;
+
+            // 가장 많이 나온 횟수 찾기
+            for (int value : count.values()) {
+                if (value > max) {
+                    max = value;
+                }
+            }
+
+            // 최대 횟수이고, 2회 이상인 조합만 정답에 추가
+            for (Map.Entry<String, Integer> entry : count.entrySet()) {
+                if (entry.getValue() == max && max > 1) {
+                    answer.add(entry.getKey());
+                }
+            }
         }
+        
         
         Collections.sort(answer);
         return answer.toArray(new String[0]);
