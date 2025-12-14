@@ -1,65 +1,55 @@
 import java.util.*;
 
 class Solution {
-    
-    private class Node{
+
+    private static class Node {
         int dest;
         int cost;
-        
-        public Node(int dest, int cost){
+
+        Node(int dest, int cost) {
             this.dest = dest;
             this.cost = cost;
         }
     }
-    
-    
+
     public int solution(int N, int[][] road, int K) {
-        int answer = 0;
+        int[] dist = new int[N + 1];
+        Arrays.fill(dist, Integer.MAX_VALUE);
 
-        int[] arr = new int[N+1];
-        
-        Arrays.fill(arr, Integer.MAX_VALUE);
-        
-        ArrayList<Node>[] adjList = new ArrayList[N+1];
-     
-        for(int i = 0; i < N+1; i++){
-            adjList[i] = new ArrayList<Node>();
+        List<Node>[] graph = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++) {
+            graph[i] = new ArrayList<>();
         }
-        
-        for(int[] r : road){
-            int a = r[0];
-            int b = r[1];
-            int c = r[2];
-            
-            adjList[a].add(new Node(b,c));
-            adjList[b].add(new Node(a,c));
+
+        for (int[] r : road) {
+            int a = r[0], b = r[1], c = r[2];
+            graph[a].add(new Node(b, c));
+            graph[b].add(new Node(a, c));
         }
-        
-        PriorityQueue<Node> queue = new PriorityQueue<>((o1, o2)-> Integer.compare(o1.cost, o2.cost));
-        arr[1] = 0;
-        queue.add(new Node(1, 0));
-        
-        while(!queue.isEmpty()){
-            Node now = queue.poll();
 
-            // 이미 더 짧은 거리로 방문한 적이 있다면 스킵
-            if (arr[now.dest] < now.cost) continue;
+        PriorityQueue<Node> pq =
+            new PriorityQueue<>(Comparator.comparingInt(n -> n.cost));
 
-            for (Node next : adjList[now.dest]) {
-                int newCost = now.cost + next.cost;
+        dist[1] = 0;
+        pq.offer(new Node(1, 0));
 
-                // 더 짧은 거리라면 갱신
-                if (arr[next.dest] > newCost) {
-                    arr[next.dest] = newCost;
-                    queue.add(new Node(next.dest, newCost));
+        while (!pq.isEmpty()) {
+            Node cur = pq.poll();
+
+            if (dist[cur.dest] < cur.cost) continue;
+
+            for (Node next : graph[cur.dest]) {
+                int newCost = cur.cost + next.cost;
+                if (dist[next.dest] > newCost) {
+                    dist[next.dest] = newCost;
+                    pq.offer(new Node(next.dest, newCost));
                 }
             }
         }
-        
-        for(int res : arr){
-            if(res<=K){
-                answer++;
-            }
+
+        int answer = 0;
+        for (int i = 1; i <= N; i++) {
+            if (dist[i] <= K) answer++;
         }
 
         return answer;
