@@ -1,19 +1,23 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
     public int solution(int k, int m, int[] score) {
-        // 내림차순 정렬
+        int answer = 0;
+        List<Integer> a = new ArrayList<>();
+        
+        //내림차순 정렬
         Arrays.sort(score);
-
-        int n = score.length;
-        int profit = 0;
-
-        // 뒤에서부터 m개씩 묶기
-        for (int i = n - m; i >= 0; i -= m) {
-            int minScoreInBox = score[i];
-            profit += minScoreInBox * m;
+        
+        
+        for(int i = score.length-1; i >= 0; i--) {
+            
+            a.add(score[i]);
+            if(a.size() == m) {
+               
+                answer += a.get(m-1) * m;
+                a = new ArrayList<>();
+            }
         }
-
-        return profit;
+        return answer;
     }
 }

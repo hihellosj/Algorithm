@@ -1,10 +1,10 @@
 # [level 1] 과일 장수 - 135808 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/135808?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/135808) 
 
 ### 성능 요약
 
-메모리: 127 MB, 시간: 78.30 ms
+메모리: 137 MB, 시간: 97.95 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2026년 02월 01일 14:44:53
+2026년 02월 25일 21:19:44
 
 ### 문제 설명
 
